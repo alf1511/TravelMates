@@ -1,9 +1,12 @@
+from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from django import forms
+from django.forms import ModelForm
+
+from .models import Post
+
 
 class CreateUserForm(UserCreationForm):
-
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
@@ -19,3 +22,10 @@ class CreateUserForm(UserCreationForm):
         if User.objects.filter(username=username).exists():
             raise forms.ValidationError('Username is already exist')
         return username
+
+class CreatePostForm(ModelForm):
+    caption = forms.CharField(widget=forms.Textarea(attrs={"rows":"5"}))
+
+    class Meta:
+        model = Post
+        fields = ['image_path', 'caption']
